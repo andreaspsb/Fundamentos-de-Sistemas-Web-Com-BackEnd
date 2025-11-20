@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Adiciona interatividade aos produtos
   addProductInteractions();
+  
+  // Inicia o carrossel automático com controles temporais
+  initCarousel();
 });
 
 /**
@@ -100,4 +103,88 @@ function formatCurrency(value) {
 function showToast(message, type = 'info') {
   // Esta função pode ser expandida para usar os toasts do Bootstrap
   console.log(`[${type.toUpperCase()}] ${message}`);
+}
+
+/**
+ * Inicializa o carrossel com controle temporal automático
+ * Demonstra o uso de setTimeout e setInterval
+ */
+function initCarousel() {
+  const carouselElement = document.getElementById('carouselPromocoes');
+  
+  if (!carouselElement) {
+    return; // Carrossel não existe nesta página
+  }
+  
+  // Inicializa o carrossel do Bootstrap
+  const carousel = new bootstrap.Carousel(carouselElement, {
+    interval: 4000, // Troca a cada 4 segundos
+    wrap: true,     // Volta ao início após o último slide
+    pause: 'hover'  // Pausa quando o mouse está sobre o carrossel
+  });
+  
+  // Adiciona contador de visualizações usando setTimeout
+  let slideCounter = 0;
+  const slides = carouselElement.querySelectorAll('.carousel-item');
+  
+  // Mostra mensagem de boas-vindas após 2 segundos
+  setTimeout(() => {
+    console.log('🐾 Bem-vindo ao Pet Shop! Confira nossas promoções no carrossel!');
+  }, 2000);
+  
+  // Contador de tempo total de visualização usando setInterval
+  let tempoTotal = 0;
+  const contadorTempo = setInterval(() => {
+    tempoTotal++;
+    if (tempoTotal % 10 === 0) {
+      console.log(`⏱️ Você está navegando há ${tempoTotal} segundos`);
+    }
+  }, 1000);
+  
+  // Event listener para mudanças de slide
+  carouselElement.addEventListener('slide.bs.carousel', function(event) {
+    slideCounter++;
+    const slideAtual = event.to + 1;
+    const totalSlides = slides.length;
+    
+    console.log(`🖼️ Slide ${slideAtual}/${totalSlides} - Total de trocas: ${slideCounter}`);
+    
+    // Destaca promoção especial após 3 trocas de slide
+    if (slideCounter === 3) {
+      setTimeout(() => {
+        console.log('🎉 PROMOÇÃO ESPECIAL: Você está engajado! Use o cupom PETLOVER10 para 10% de desconto!');
+      }, 500);
+    }
+  });
+  
+  // Para o contador quando o usuário sai da página
+  window.addEventListener('beforeunload', () => {
+    clearInterval(contadorTempo);
+    console.log(`👋 Até logo! Você ficou ${tempoTotal} segundos na página.`);
+  });
+  
+  // Controle manual: pausar/retomar com teclas
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+      carousel.next();
+      console.log('➡️ Próximo slide (atalho de teclado)');
+    } else if (event.key === 'ArrowLeft') {
+      carousel.prev();
+      console.log('⬅️ Slide anterior (atalho de teclado)');
+    } else if (event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      if (carouselElement.classList.contains('paused')) {
+        carousel.cycle();
+        carouselElement.classList.remove('paused');
+        console.log('▶️ Carrossel retomado');
+      } else {
+        carousel.pause();
+        carouselElement.classList.add('paused');
+        console.log('⏸️ Carrossel pausado');
+      }
+    }
+  });
+  
+  console.log('🎠 Carrossel inicializado com sucesso!');
+  console.log('💡 Dicas: Use ← → para navegar | Espaço para pausar/retomar');
 }
