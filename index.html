@@ -21,28 +21,30 @@
     </header>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm" role="navigation" aria-label="Navegação principal">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-primary" href="./">🐾 Pet Shop</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand fw-bold text-primary" href="./" aria-label="Página inicial do Pet Shop">
+                <span aria-hidden="true">🐾</span> Pet Shop
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menu de navegação">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="./">Home</a>
+                        <a class="nav-link active" href="./" aria-current="page">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="categorias/racoes-alimentacao/" title="Rações e Alimentação">Rações e Alimentação</a>
+                        <a class="nav-link" href="categorias/racoes-alimentacao/">Rações e Alimentação</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="categorias/acessorios-brinquedos/" title="Acessórios e Brinquedos">Acessórios e Brinquedos</a>
+                        <a class="nav-link" href="categorias/acessorios-brinquedos/">Acessórios e Brinquedos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="categorias/higiene-cuidados/" title="Higiene e Cuidados">Higiene e Cuidados</a>
+                        <a class="nav-link" href="categorias/higiene-cuidados/">Higiene e Cuidados</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="servicos/" title="Serviços">Serviços</a>
+                        <a class="nav-link" href="servicos/">Serviços</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="cadastro.html">Cadastro</a>
@@ -55,12 +57,12 @@
     <!-- Main Content -->
     <main class="container my-5">
         <!-- Carrossel de Promoções -->
-        <section class="mb-5">
-            <div id="carouselPromocoes" class="carousel slide shadow-lg rounded" data-bs-ride="carousel">
+        <section class="mb-5" aria-label="Promoções em destaque">
+            <div id="carouselPromocoes" class="carousel slide shadow-lg rounded" data-bs-ride="carousel" role="region" aria-label="Carrossel de promoções">
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselPromocoes" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselPromocoes" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselPromocoes" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselPromocoes" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Promoção 1: Rações com desconto"></button>
+                    <button type="button" data-bs-target="#carouselPromocoes" data-bs-slide-to="1" aria-label="Promoção 2: Banho e tosa"></button>
+                    <button type="button" data-bs-target="#carouselPromocoes" data-bs-slide-to="2" aria-label="Promoção 3: Brinquedos e acessórios"></button>
                 </div>
                 <div class="carousel-inner rounded">
                     <div class="carousel-item active">
@@ -114,40 +116,40 @@
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100 shadow-sm hover-card">
                     <div class="card-body text-center">
-                        <div class="display-4 mb-3">🍖</div>
+                        <div class="display-4 mb-3" aria-hidden="true">🍖</div>
                         <h5 class="card-title">Rações e Alimentação</h5>
                         <p class="card-text">Rações premium, petiscos e suplementos</p>
-                        <a href="categorias/racoes-alimentacao/" class="btn btn-primary">Ver Produtos</a>
+                        <a href="categorias/racoes-alimentacao/" class="btn btn-primary" aria-label="Ver produtos de rações e alimentação">Ver Produtos</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100 shadow-sm hover-card">
                     <div class="card-body text-center">
-                        <div class="display-4 mb-3">🎾</div>
+                        <div class="display-4 mb-3" aria-hidden="true">🎾</div>
                         <h5 class="card-title">Acessórios e Brinquedos</h5>
                         <p class="card-text">Coleiras, camas, roupas e brinquedos</p>
-                        <a href="categorias/acessorios-brinquedos/" class="btn btn-primary">Ver Produtos</a>
+                        <a href="categorias/acessorios-brinquedos/" class="btn btn-primary" aria-label="Ver produtos de acessórios e brinquedos">Ver Produtos</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100 shadow-sm hover-card">
                     <div class="card-body text-center">
-                        <div class="display-4 mb-3">🧼</div>
+                        <div class="display-4 mb-3" aria-hidden="true">🧼</div>
                         <h5 class="card-title">Higiene e Cuidados</h5>
                         <p class="card-text">Produtos de limpeza e beleza</p>
-                        <a href="categorias/higiene-cuidados/" class="btn btn-primary">Ver Produtos</a>
+                        <a href="categorias/higiene-cuidados/" class="btn btn-primary" aria-label="Ver produtos de higiene e cuidados">Ver Produtos</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100 shadow-sm hover-card">
                     <div class="card-body text-center">
-                        <div class="display-4 mb-3">✂️</div>
+                        <div class="display-4 mb-3" aria-hidden="true">✂️</div>
                         <h5 class="card-title">Serviços</h5>
                         <p class="card-text">Banho, tosa e tele-busca</p>
-                        <a href="servicos/" class="btn btn-primary">Ver Serviços</a>
+                        <a href="servicos/" class="btn btn-primary" aria-label="Ver serviços disponíveis">Ver Serviços</a>
                     </div>
                 </div>
             </div>
@@ -155,7 +157,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-4 mt-5">
+    <footer class="bg-dark text-white text-center py-4 mt-5" role="contentinfo">
         <div class="container">
             <p class="mb-0">&copy; 2025 Pet Shop - Todos os direitos reservados</p>
         </div>

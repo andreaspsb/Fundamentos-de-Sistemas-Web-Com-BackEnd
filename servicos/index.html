@@ -21,10 +21,12 @@
   </header>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm" role="navigation" aria-label="Navegação principal">
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold text-primary" href="../">🐾 Pet Shop</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand fw-bold text-primary" href="../" aria-label="Página inicial do Pet Shop">
+        <span aria-hidden="true">🐾</span> Pet Shop
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menu de navegação">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -42,7 +44,7 @@
             <a class="nav-link" href="../categorias/higiene-cuidados/">Higiene e Cuidados</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="./">Serviços</a>
+            <a class="nav-link active" href="./" aria-current="page">Serviços</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="../cadastro.html">Cadastro</a>
@@ -62,11 +64,11 @@
           <div class="card h-100 shadow-sm">
             <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&h=300&fit=crop" class="card-img-top" alt="Banho" style="height: 250px; object-fit: cover;">
             <div class="card-body text-center">
-              <div class="display-4 mb-3">🛁</div>
+              <div class="display-4 mb-3" aria-hidden="true">🛁</div>
               <h3 class="card-title">Banho</h3>
               <p class="card-text">Banho completo com produtos de qualidade</p>
               <p class="text-primary fw-bold fs-4">R$ 50,00</p>
-              <a href="agendamento.html?servico=banho" class="btn btn-outline-primary w-100">Agendar</a>
+              <a href="agendamento.html?servico=banho" class="btn btn-outline-primary w-100" aria-label="Agendar serviço de banho">Agendar</a>
             </div>
           </div>
         </div>
@@ -75,11 +77,11 @@
           <div class="card h-100 shadow-sm">
             <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&h=300&fit=crop" class="card-img-top" alt="Tosa" style="height: 250px; object-fit: cover;">
             <div class="card-body text-center">
-              <div class="display-4 mb-3">✂️</div>
+              <div class="display-4 mb-3" aria-hidden="true">✂️</div>
               <h3 class="card-title">Tosa</h3>
               <p class="card-text">Tosa higiênica ou completa</p>
               <p class="text-primary fw-bold fs-4">R$ 40,00</p>
-              <a href="agendamento.html?servico=tosa" class="btn btn-outline-primary w-100">Agendar</a>
+              <a href="agendamento.html?servico=tosa" class="btn btn-outline-primary w-100" aria-label="Agendar serviço de tosa">Agendar</a>
             </div>
           </div>
         </div>
@@ -89,11 +91,11 @@
             <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=600&h=300&fit=crop" class="card-img-top" alt="Banho + Tosa" style="height: 250px; object-fit: cover;">
             <div class="card-body text-center">
               <span class="badge bg-warning text-dark mb-2">Combo</span>
-              <div class="display-4 mb-3">🛁✂️</div>
+              <div class="display-4 mb-3" aria-hidden="true">🛁✂️</div>
               <h3 class="card-title">Banho + Tosa</h3>
               <p class="card-text">Pacote completo com desconto</p>
               <p class="text-success fw-bold fs-4">R$ 80,00 <small class="text-muted text-decoration-line-through">R$ 90,00</small></p>
-              <a href="agendamento.html?servico=completo" class="btn btn-primary w-100">Agendar</a>
+              <a href="agendamento.html?servico=completo" class="btn btn-primary w-100" aria-label="Agendar combo de banho e tosa">Agendar</a>
             </div>
           </div>
         </div>
@@ -137,7 +139,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-4 mt-5">
+  <footer class="bg-dark text-white text-center py-4 mt-5" role="contentinfo">
     <div class="container">
       <p class="mb-0">&copy; 2025 Pet Shop - Todos os direitos reservados</p>
     </div>
