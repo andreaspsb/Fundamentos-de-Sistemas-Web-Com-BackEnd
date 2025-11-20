@@ -12,43 +12,89 @@
   <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Rações e Alimentação</h1>
-    <p>Rações, petiscos e suplementos para cães e gatos.</p>
+  <!-- Header -->
+  <header class="bg-primary text-white py-5 text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Rações e Alimentação</h1>
+      <p class="lead">Rações, petiscos e suplementos para cães e gatos</p>
+    </div>
   </header>
 
-  <nav>
-    <ul>
-      <li><a href="../../">Home</a></li>
-      <li><a href="../racoes-alimentacao/">Rações e Alimentação</a></li>
-      <li><a href="../acessorios-brinquedos/">Acessórios e Brinquedos</a></li>
-      <li><a href="../higiene-cuidados/">Higiene e Cuidados</a></li>
-      <li><a href="../../servicos/">Serviços</a></li>
-    </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary" href="../../">🐾 Pet Shop</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="../../">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="../racoes-alimentacao/">Rações e Alimentação</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../acessorios-brinquedos/">Acessórios e Brinquedos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../higiene-cuidados/">Higiene e Cuidados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../servicos/">Serviços</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </nav>
 
-  <main>
+  <!-- Main Content -->
+  <main class="container my-5">
     <section>
-      <h2>Produtos em destaque</h2>
+      <h2 class="text-primary mb-4 border-bottom border-3 border-warning pb-2">Produtos em Destaque</h2>
       
-      <article>
-        <img src="imagens/racao-premium-caes.jpg" alt="Ração Premium para Cães Adultos">
-        <h3>Ração Premium para Cães Adultos</h3>
-        <p>Ração seca de alta qualidade para cães adultos de todos os portes. Fórmula balanceada com vitaminas e minerais essenciais. Embalagem de 10kg.</p>
-        <p><strong>Valor:</strong> R$ 150,00</p>
-      </article>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <img src="imagens/racao-premium-caes.jpg" class="card-img-top" alt="Ração Premium para Cães Adultos" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+              <h3 class="card-title text-primary">Ração Premium para Cães Adultos</h3>
+              <p class="card-text">Ração seca de alta qualidade para cães adultos de todos os portes. Fórmula balanceada com vitaminas e minerais essenciais. Embalagem de 10kg.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-success fs-5">R$ 150,00</span>
+                <button class="btn btn-primary">
+                  <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <article>
-        <img src="imagens/racao-hipoalergenica-gatos.jpg" alt="Ração Hipoalergênica para Gatos">
-        <h3>Ração Hipoalergênica para Gatos</h3>
-        <p>Ração especial para gatos com sensibilidade alimentar. Ingredientes selecionados que não causam alergias. Embalagem de 3kg.</p>
-        <p><strong>Valor:</strong> R$ 95,00</p>
-      </article>
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <img src="imagens/racao-hipoalergenica-gatos.jpg" class="card-img-top" alt="Ração Hipoalergênica para Gatos" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+              <h3 class="card-title text-primary">Ração Hipoalergênica para Gatos</h3>
+              <p class="card-text">Ração especial para gatos com sensibilidade alimentar. Ingredientes selecionados que não causam alergias. Embalagem de 3kg.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-success fs-5">R$ 95,00</span>
+                <button class="btn btn-primary">
+                  <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>2025 Pet Shop</p>
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 Pet Shop - Todos os direitos reservados</p>
+    </div>
   </footer>
   
   <!-- Bootstrap 5 JS Bundle -->

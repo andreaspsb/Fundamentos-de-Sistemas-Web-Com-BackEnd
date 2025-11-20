@@ -12,43 +12,89 @@
   <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Higiene e Cuidados</h1>
-    <p>Produtos de higiene, beleza e primeiros socorros para pets.</p>
+  <!-- Header -->
+  <header class="bg-primary text-white py-5 text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Higiene e Cuidados</h1>
+      <p class="lead">Produtos de higiene, beleza e primeiros socorros para pets</p>
+    </div>
   </header>
 
-  <nav>
-    <ul>
-      <li><a href="../../">Home</a></li>
-      <li><a href="../racoes-alimentacao/">Rações e Alimentação</a></li>
-      <li><a href="../acessorios-brinquedos/">Acessórios e Brinquedos</a></li>
-      <li><a href="../higiene-cuidados/">Higiene e Cuidados</a></li>
-      <li><a href="../../servicos/">Serviços</a></li>
-    </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary" href="../../">🐾 Pet Shop</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="../../">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../racoes-alimentacao/">Rações e Alimentação</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../acessorios-brinquedos/">Acessórios e Brinquedos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="../higiene-cuidados/">Higiene e Cuidados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../servicos/">Serviços</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </nav>
 
-  <main>
+  <!-- Main Content -->
+  <main class="container my-5">
     <section>
-      <h2>Produtos em destaque</h2>
+      <h2 class="text-primary mb-4 border-bottom border-3 border-warning pb-2">Produtos em Destaque</h2>
       
-      <article>
-        <img src="imagens/xampu-condicionador.jpg" alt="Kit Xampu e Condicionador">
-        <h3>Kit Xampu e Condicionador para Peles Sensíveis</h3>
-        <p>Conjunto completo para banho de pets com pele sensível. Fórmula hipoalergênica e pH balanceado. Fragrância suave. Frascos de 500ml cada.</p>
-        <p><strong>Valor:</strong> R$ 65,00</p>
-      </article>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <img src="imagens/xampu-condicionador.jpg" class="card-img-top" alt="Kit Xampu e Condicionador" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+              <h3 class="card-title text-primary">Kit Xampu e Condicionador para Peles Sensíveis</h3>
+              <p class="card-text">Conjunto completo para banho de pets com pele sensível. Fórmula hipoalergênica e pH balanceado. Fragrância suave. Frascos de 500ml cada.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-success fs-5">R$ 65,00</span>
+                <button class="btn btn-primary">
+                  <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <article>
-        <img src="imagens/antipulgas.jpg" alt="Antipulgas e Carrapatos">
-        <h3>Antipulgas e Carrapatos</h3>
-        <p>Proteção eficaz contra pulgas e carrapatos por até 3 meses. Aplicação tópica fácil e segura. Para cães de 10 a 25kg. Embalagem com 3 pipetas.</p>
-        <p><strong>Valor:</strong> R$ 85,00</p>
-      </article>
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <img src="imagens/antipulgas.jpg" class="card-img-top" alt="Antipulgas e Carrapatos" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+              <h3 class="card-title text-primary">Antipulgas e Carrapatos</h3>
+              <p class="card-text">Proteção eficaz contra pulgas e carrapatos por até 3 meses. Aplicação tópica fácil e segura. Para cães de 10 a 25kg. Embalagem com 3 pipetas.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-success fs-5">R$ 85,00</span>
+                <button class="btn btn-primary">
+                  <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>2025 Pet Shop</p>
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 Pet Shop - Todos os direitos reservados</p>
+    </div>
   </footer>
   
   <!-- Bootstrap 5 JS Bundle -->

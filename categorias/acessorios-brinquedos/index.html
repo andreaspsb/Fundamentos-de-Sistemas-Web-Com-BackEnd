@@ -12,43 +12,89 @@
   <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Acessórios e Brinquedos</h1>
-    <p>Coleiras, camas, roupas, brinquedos e itens para passeios.</p>
+  <!-- Header -->
+  <header class="bg-primary text-white py-5 text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Acessórios e Brinquedos</h1>
+      <p class="lead">Coleiras, camas, roupas, brinquedos e itens para passeios</p>
+    </div>
   </header>
 
-  <nav>
-    <ul>
-      <li><a href="../../">Home</a></li>
-      <li><a href="../racoes-alimentacao/">Rações e Alimentação</a></li>
-      <li><a href="../acessorios-brinquedos/">Acessórios e Brinquedos</a></li>
-      <li><a href="../higiene-cuidados/">Higiene e Cuidados</a></li>
-      <li><a href="../../servicos/">Serviços</a></li>
-    </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary" href="../../">🐾 Pet Shop</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="../../">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../racoes-alimentacao/">Rações e Alimentação</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="../acessorios-brinquedos/">Acessórios e Brinquedos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../higiene-cuidados/">Higiene e Cuidados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../servicos/">Serviços</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </nav>
 
-  <main>
+  <!-- Main Content -->
+  <main class="container my-5">
     <section>
-      <h2>Produtos em destaque</h2>
+      <h2 class="text-primary mb-4 border-bottom border-3 border-warning pb-2">Produtos em Destaque</h2>
       
-      <article>
-        <img src="imagens/coleira-guia.jpg" alt="Kit Coleira e Guia Resistente">
-        <h3>Kit Coleira e Guia Resistente</h3>
-        <p>Conjunto de coleira ajustável e guia de 1,5m em nylon resistente. Ideal para passeios seguros. Disponível em várias cores. Tamanho M.</p>
-        <p><strong>Valor:</strong> R$ 45,00</p>
-      </article>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <img src="imagens/coleira-guia.jpg" class="card-img-top" alt="Kit Coleira e Guia Resistente" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+              <h3 class="card-title text-primary">Kit Coleira e Guia Resistente</h3>
+              <p class="card-text">Conjunto de coleira ajustável e guia de 1,5m em nylon resistente. Ideal para passeios seguros. Disponível em várias cores. Tamanho M.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-success fs-5">R$ 45,00</span>
+                <button class="btn btn-primary">
+                  <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <article>
-        <img src="imagens/cama-ortopedica.jpg" alt="Cama Ortopédica para Cães">
-        <h3>Cama Ortopédica para Cães</h3>
-        <p>Cama confortável com espuma ortopédica de alta densidade. Perfeita para cães idosos ou com problemas articulares. Capa removível e lavável. Tamanho G.</p>
-        <p><strong>Valor:</strong> R$ 180,00</p>
-      </article>
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <img src="imagens/cama-ortopedica.jpg" class="card-img-top" alt="Cama Ortopédica para Cães" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+              <h3 class="card-title text-primary">Cama Ortopédica para Cães</h3>
+              <p class="card-text">Cama confortável com espuma ortopédica de alta densidade. Perfeita para cães idosos ou com problemas articulares. Capa removível e lavável. Tamanho G.</p>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-success fs-5">R$ 180,00</span>
+                <button class="btn btn-primary">
+                  <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>2025 Pet Shop</p>
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 Pet Shop - Todos os direitos reservados</p>
+    </div>
   </footer>
   
   <!-- Bootstrap 5 JS Bundle -->
