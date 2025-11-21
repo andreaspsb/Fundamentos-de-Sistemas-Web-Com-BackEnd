@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Produtos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><i class="bi bi-shop"></i> Admin Pet Shop</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link active" href="produtos.html">Produtos</a></li>
+          <li class="nav-item"><a class="nav-link" href="clientes.html">Clientes</a></li>
+          <li class="nav-item"><a class="nav-link" href="agendamentos.html">Agendamentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="pedidos.html">Pedidos</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5">
+    <h1 class="mb-4"><i class="bi bi-box"></i> Gerenciar Produtos</h1>
+    <div class="mb-3 text-end">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalProduto">
+        <i class="bi bi-plus-circle"></i> Novo Produto
+      </button>
+    </div>
+    <div id="produtos-lista" class="table-responsive"></div>
+  </main>
+
+  <!-- Modal Produto -->
+  <div class="modal fade" id="modalProduto" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formProduto">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="bi bi-box"></i> Produto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="produtoId">
+            <div class="mb-3">
+              <label for="produtoNome" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="produtoNome" required>
+            </div>
+            <div class="mb-3">
+              <label for="produtoDescricao" class="form-label">Descrição</label>
+              <textarea class="form-control" id="produtoDescricao" rows="2" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="produtoPreco" class="form-label">Preço</label>
+              <input type="number" class="form-control" id="produtoPreco" min="0" step="0.01" required>
+            </div>
+            <div class="mb-3">
+              <label for="produtoEstoque" class="form-label">Estoque</label>
+              <input type="number" class="form-control" id="produtoEstoque" min="0" required>
+            </div>
+            <div class="mb-3">
+              <label for="produtoImagem" class="form-label">URL da Imagem</label>
+              <input type="url" class="form-control" id="produtoImagem">
+            </div>
+            <div class="mb-3">
+              <label for="produtoCategoria" class="form-label">Categoria</label>
+              <select class="form-select" id="produtoCategoria" required></select>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="produtoAtivo" checked>
+              <label class="form-check-label" for="produtoAtivo">Produto ativo</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/api-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    AuthManager.protectPage('ADMIN');
+    document.addEventListener('DOMContentLoaded', function() {
+      carregarCategorias();
+      carregarProdutos();
+    });
+
+    async function carregarCategorias() {
+      const select = document.getElementById('produtoCategoria');
+      select.innerHTML = '';
+      try {
+        const resp = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORIAS}`);
+        const categorias = await resp.json();
+        categorias.forEach(cat => {
+          const opt = document.createElement('option');
+          opt.value = cat.id;
+          opt.textContent = cat.nome;
+          select.appendChild(opt);
+        });
+      } catch (e) {
+        mostrarToast('Erro ao carregar categorias', 'danger');
+      }
+    }
+
+    async function carregarProdutos() {
+      const lista = document.getElementById('produtos-lista');
+      lista.innerHTML = '<div class="text-center my-5"><span class="spinner-border"></span> Carregando...</div>';
+      try {
+        const resp = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PRODUTOS}`);
+        const produtos = await resp.json();
+        let html = `<table class="table table-striped align-middle">
+          <thead><tr><th>ID</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Ativo</th><th>Ações</th></tr></thead><tbody>`;
+        produtos.forEach(prod => {
+          html += `<tr>
+            <td>${prod.id}</td>
+            <td>${prod.nome}</td>
+            <td>${prod.categoria ? prod.categoria.nome : '-'}</td>
+            <td>${formatarMoeda(prod.preco)}</td>
+            <td>${prod.quantidadeEstoque}</td>
+            <td>${prod.ativo ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-danger">Não</span>'}</td>
+            <td>
+              <button class="btn btn-sm btn-primary me-1" onclick="editarProduto(${prod.id})"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-danger" onclick="excluirProduto(${prod.id})"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+        lista.innerHTML = html;
+      } catch (e) {
+        lista.innerHTML = '<div class="alert alert-danger">Erro ao carregar produtos</div>';
+      }
+    }
+
+    window.editarProduto = async function(id) {
+      try {
+        const resp = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PRODUTOS}/${id}`);
+        const prod = await resp.json();
+        document.getElementById('produtoId').value = prod.id;
+        document.getElementById('produtoNome').value = prod.nome;
+        document.getElementById('produtoDescricao').value = prod.descricao;
+        document.getElementById('produtoPreco').value = prod.preco;
+        document.getElementById('produtoEstoque').value = prod.quantidadeEstoque;
+        document.getElementById('produtoImagem').value = prod.urlImagem || '';
+        document.getElementById('produtoCategoria').value = prod.categoria ? prod.categoria.id : '';
+        document.getElementById('produtoAtivo').checked = !!prod.ativo;
+        new bootstrap.Modal(document.getElementById('modalProduto')).show();
+      } catch (e) {
+        mostrarToast('Erro ao carregar produto', 'danger');
+      }
+    }
+
+    window.excluirProduto = async function(id) {
+      if (!confirm('Confirma excluir este produto?')) return;
+      try {
+        const resp = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PRODUTOS}/${id}`, { method: 'DELETE' });
+        if (!resp.ok) throw new Error();
+        mostrarToast('Produto excluído!', 'success');
+        carregarProdutos();
+      } catch (e) {
+        mostrarToast('Erro ao excluir produto', 'danger');
+      }
+    }
+
+    document.getElementById('formProduto').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('produtoId').value;
+      const nome = document.getElementById('produtoNome').value;
+      const descricao = document.getElementById('produtoDescricao').value;
+      const preco = parseFloat(document.getElementById('produtoPreco').value);
+      const quantidadeEstoque = parseInt(document.getElementById('produtoEstoque').value);
+      const urlImagem = document.getElementById('produtoImagem').value;
+      const categoriaId = document.getElementById('produtoCategoria').value;
+      const ativo = document.getElementById('produtoAtivo').checked;
+      const produto = { nome, descricao, preco, quantidadeEstoque, urlImagem, categoriaId, ativo };
+      try {
+        let resp;
+        if (id) {
+          resp = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PRODUTOS}/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(produto)
+          });
+        } else {
+          resp = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PRODUTOS}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(produto)
+          });
+        }
+        if (!resp.ok) throw new Error();
+        mostrarToast('Produto salvo!', 'success');
+        bootstrap.Modal.getInstance(document.getElementById('modalProduto')).hide();
+        carregarProdutos();
+      } catch (e) {
+        mostrarToast('Erro ao salvar produto', 'danger');
+      }
+    });
+
+    function formatarMoeda(valor) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+    }
+
+    function mostrarToast(msg, tipo = 'info') {
+      let toastContainer = document.querySelector('.toast-container');
+      const toastId = 'toast-' + Date.now();
+      const toastHTML = `<div id="${toastId}" class="toast align-items-center text-bg-${tipo} border-0" role="alert"><div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>`;
+      toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+      const toastElement = document.getElementById(toastId);
+      const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+      toast.show();
+      toastElement.addEventListener('hidden.bs.toast', function() { toastElement.remove(); });
+    }
+  </script>
+</body>
+</html>

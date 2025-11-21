@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho de Compras - Pet Shop</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="bi bi-shop"></i> Pet Shop
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto" id="menu-principal">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Início</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              Produtos
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="categorias/racoes-alimentacao/index.html">Rações e Alimentação</a></li>
+              <li><a class="dropdown-item" href="categorias/acessorios-brinquedos/index.html">Acessórios e Brinquedos</a></li>
+              <li><a class="dropdown-item" href="categorias/higiene-cuidados/index.html">Higiene e Cuidados</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="servicos/index.html">Serviços</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cadastro.html">Cadastro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="carrinho.html">
+              <i class="bi bi-cart3"></i> Carrinho
+              <span class="badge bg-primary" id="carrinho-contador">0</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="py-5">
+    <div class="container">
+      <h1 class="mb-4">
+        <i class="bi bi-cart3"></i> Carrinho de Compras
+      </h1>
+
+      <!-- Mensagem de carrinho vazio -->
+      <div id="carrinho-vazio" class="alert alert-info d-none">
+        <i class="bi bi-cart-x"></i> Seu carrinho está vazio.
+        <a href="index.html" class="alert-link">Continuar comprando</a>
+      </div>
+
+      <!-- Itens do carrinho -->
+      <div id="carrinho-items" class="row">
+        <!-- Será preenchido via JavaScript -->
+      </div>
+
+      <!-- Resumo do pedido -->
+      <div id="carrinho-resumo" class="row mt-4 d-none">
+        <div class="col-md-8">
+          <a href="index.html" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Continuar Comprando
+          </a>
+          <button class="btn btn-outline-danger" onclick="limparCarrinho()">
+            <i class="bi bi-trash"></i> Limpar Carrinho
+          </button>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Resumo do Pedido</h5>
+              <hr>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <strong id="carrinho-subtotal">R$ 0,00</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Frete:</span>
+                <strong id="carrinho-frete">Grátis</strong>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between mb-3">
+                <strong>Total:</strong>
+                <strong class="text-primary" id="carrinho-total">R$ 0,00</strong>
+              </div>
+              <button class="btn btn-primary w-100" onclick="finalizarCompra()">
+                <i class="bi bi-check-circle"></i> Finalizar Compra
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <p>&copy; 2024 Pet Shop. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Scripts da aplicação -->
+  <script src="js/api-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/carrinho.js"></script>
+  <script>
+    // Carregar e exibir carrinho ao carregar página
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📦 Carregando página do carrinho...');
+      
+      // Adicionar link do carrinho ao navbar
+      CarrinhoManager.adicionarLinkCarrinho();
+      
+      // Carregar itens do carrinho
+      exibirCarrinho();
+    });
+
+    /**
+     * Exibe os itens do carrinho
+     */
+    function exibirCarrinho() {
+      const carrinho = CarrinhoManager.getCarrinho();
+      const carrinhoVazio = document.getElementById('carrinho-vazio');
+      const carrinhoItems = document.getElementById('carrinho-items');
+      const carrinhoResumo = document.getElementById('carrinho-resumo');
+
+      if (carrinho.length === 0) {
+        carrinhoVazio.classList.remove('d-none');
+        carrinhoItems.innerHTML = '';
+        carrinhoResumo.classList.add('d-none');
+        return;
+      }
+
+      carrinhoVazio.classList.add('d-none');
+      carrinhoResumo.classList.remove('d-none');
+
+      // Renderizar itens
+      carrinhoItems.innerHTML = '';
+      carrinho.forEach(item => {
+        const itemHTML = `
+          <div class="col-12 mb-3">
+            <div class="card">
+              <div class="row g-0">
+                <div class="col-md-2">
+                  <img src="${item.urlImagem || 'https://via.placeholder.com/150x150?text=Sem+Imagem'}" 
+                       class="img-fluid rounded-start" 
+                       alt="${item.nome}"
+                       style="height: 150px; object-fit: cover;">
+                </div>
+                <div class="col-md-10">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-md-5">
+                        <h5 class="card-title">${item.nome}</h5>
+                        <p class="card-text text-primary fw-bold">${formatarMoeda(item.preco)}</p>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">Quantidade:</label>
+                        <div class="input-group input-group-sm">
+                          <button class="btn btn-outline-secondary" onclick="alterarQuantidade(${item.id}, ${item.quantidade - 1})">
+                            <i class="bi bi-dash"></i>
+                          </button>
+                          <input type="number" 
+                                 class="form-control text-center" 
+                                 value="${item.quantidade}" 
+                                 min="1" 
+                                 max="${item.quantidadeEstoque}"
+                                 onchange="alterarQuantidade(${item.id}, this.value)"
+                                 style="max-width: 60px;">
+                          <button class="btn btn-outline-secondary" onclick="alterarQuantidade(${item.id}, ${item.quantidade + 1})">
+                            <i class="bi bi-plus"></i>
+                          </button>
+                        </div>
+                        <small class="text-muted">${item.quantidadeEstoque} disponível</small>
+                      </div>
+                      <div class="col-md-3">
+                        <p class="mb-0"><strong>Subtotal:</strong></p>
+                        <p class="text-success fw-bold">${formatarMoeda(item.preco * item.quantidade)}</p>
+                      </div>
+                      <div class="col-md-1">
+                        <button class="btn btn-outline-danger btn-sm" onclick="removerItem(${item.id})">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        carrinhoItems.insertAdjacentHTML('beforeend', itemHTML);
+      });
+
+      // Atualizar resumo
+      const total = CarrinhoManager.getTotal();
+      document.getElementById('carrinho-subtotal').textContent = formatarMoeda(total);
+      document.getElementById('carrinho-total').textContent = formatarMoeda(total);
+      document.getElementById('carrinho-contador').textContent = CarrinhoManager.getQuantidadeTotal();
+    }
+
+    /**
+     * Altera quantidade de um item
+     */
+    function alterarQuantidade(produtoId, novaQuantidade) {
+      novaQuantidade = parseInt(novaQuantidade);
+      
+      if (novaQuantidade <= 0) {
+        removerItem(produtoId);
+        return;
+      }
+
+      CarrinhoManager.atualizarQuantidade(produtoId, novaQuantidade);
+      exibirCarrinho();
+    }
+
+    /**
+     * Remove item do carrinho
+     */
+    function removerItem(produtoId) {
+      if (confirm('Deseja remover este item do carrinho?')) {
+        CarrinhoManager.removerProduto(produtoId);
+        exibirCarrinho();
+      }
+    }
+
+    /**
+     * Limpa todo o carrinho
+     */
+    function limparCarrinho() {
+      if (confirm('Deseja limpar todo o carrinho?')) {
+        CarrinhoManager.limparCarrinho();
+        exibirCarrinho();
+      }
+    }
+
+    /**
+     * Finaliza a compra
+     */
+    function finalizarCompra() {
+      // Verificar se usuário está logado
+      const token = localStorage.getItem('petshop_auth_token');
+      if (!token) {
+        CarrinhoManager.mostrarToast('⚠️ Você precisa estar logado para finalizar a compra!', 'warning');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+        return;
+      }
+
+      // Redirecionar para página de checkout
+      window.location.href = 'checkout.html';
+    }
+
+    /**
+     * Formata valor em moeda brasileira
+     */
+    function formatarMoeda(valor) {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(valor);
+    }
+
+    // Tornar funções disponíveis globalmente
+    window.exibirCarrinho = exibirCarrinho;
+    window.alterarQuantidade = alterarQuantidade;
+    window.removerItem = removerItem;
+    window.limparCarrinho = limparCarrinho;
+    window.finalizarCompra = finalizarCompra;
+  </script>
+</body>
+</html>

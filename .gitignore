@@ -1,0 +1,70 @@
+# Maven
+backend-springboot/target/
+backend-springboot/.mvn/
+backend-springboot/mvnw
+backend-springboot/mvnw.cmd
+**/target/
+*.class
+
+# Logs
+*.log
+logs/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# IDE - VSCode
+.vscode/
+*.code-workspace
+!.vscode/settings.json
+!.vscode/launch.json
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# H2 Database
+*.db
+*.trace.db
+
+# Spring Boot
+HELP.md
+spring-boot-starter-*/
+
+# Node (caso adicione frontend com Node futuramente)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# GitHub Actions
+.github/workflows/*.log
+
+# Azure
+.azure/
+local.settings.json
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

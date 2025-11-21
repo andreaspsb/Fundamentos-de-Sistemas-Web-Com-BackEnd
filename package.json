@@ -1,0 +1,36 @@
+{
+  "name": "fundamentos-de-sistemas-web-com-backend",
+  "version": "1.0.0",
+  "description": "Sistema completo de e-commerce e gerenciamento para Pet Shop, desenvolvido com **Spring Boot (Backend)** e **HTML5, CSS3, Bootstrap 5, JavaScript (Frontend)**.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:mobile": "playwright test --project='Mobile Chrome' --project='Mobile Safari'",
+    "test:report": "playwright show-report",
+    "test:codegen": "playwright codegen http://localhost:5500"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreaspsb/Fundamentos-de-Sistemas-Web-Com-BackEnd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andreaspsb/Fundamentos-de-Sistemas-Web-Com-BackEnd/issues"
+  },
+  "homepage": "https://github.com/andreaspsb/Fundamentos-de-Sistemas-Web-Com-BackEnd#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  }
+}

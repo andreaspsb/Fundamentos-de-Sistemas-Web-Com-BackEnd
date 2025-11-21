@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Pet Shop</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="bi bi-shop"></i> Pet Shop
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto" id="menu-principal">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Início</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              Produtos
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="categorias/racoes-alimentacao/index.html">Rações e Alimentação</a></li>
+              <li><a class="dropdown-item" href="categorias/acessorios-brinquedos/index.html">Acessórios e Brinquedos</a></li>
+              <li><a class="dropdown-item" href="categorias/higiene-cuidados/index.html">Higiene e Cuidados</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="servicos/index.html">Serviços</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cadastro.html">Cadastro</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="py-5">
+    <div class="container">
+      <h1 class="mb-4">
+        <i class="bi bi-credit-card"></i> Finalizar Compra
+      </h1>
+
+      <div class="row">
+        <!-- Formulário de Checkout -->
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="bi bi-person"></i> Dados de Entrega</h5>
+            </div>
+            <div class="card-body">
+              <form id="formCheckout">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="enderecoEntrega" class="form-label">Endereço de Entrega *</label>
+                    <input type="text" class="form-control" id="enderecoEntrega" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="telefoneContato" class="form-label">Telefone de Contato *</label>
+                    <input type="tel" class="form-control" id="telefoneContato" required>
+                  </div>
+                </div>
+
+                <div class="card mt-4">
+                  <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-credit-card-2-front"></i> Forma de Pagamento</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label class="form-label">Selecione a forma de pagamento *</label>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoPix" value="PIX" checked>
+                        <label class="form-check-label" for="pagamentoPix">
+                          <i class="bi bi-qr-code"></i> PIX
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoCredito" value="CARTAO_CREDITO">
+                        <label class="form-check-label" for="pagamentoCredito">
+                          <i class="bi bi-credit-card"></i> Cartão de Crédito
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoDebito" value="CARTAO_DEBITO">
+                        <label class="form-check-label" for="pagamentoDebito">
+                          <i class="bi bi-credit-card-fill"></i> Cartão de Débito
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="formaPagamento" id="pagamentoBoleto" value="BOLETO">
+                        <label class="form-check-label" for="pagamentoBoleto">
+                          <i class="bi bi-file-earmark-text"></i> Boleto Bancário
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label for="observacoes" class="form-label">Observações</label>
+                  <textarea class="form-control" id="observacoes" rows="3" placeholder="Alguma observação sobre o pedido?"></textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumo do Pedido -->
+        <div class="col-md-4">
+          <div class="card sticky-top" style="top: 20px;">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="bi bi-receipt"></i> Resumo do Pedido</h5>
+            </div>
+            <div class="card-body">
+              <div id="itens-resumo">
+                <!-- Será preenchido via JavaScript -->
+              </div>
+
+              <hr>
+
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <strong id="resumo-subtotal">R$ 0,00</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Frete:</span>
+                <strong id="resumo-frete">Grátis</strong>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between mb-3">
+                <strong>Total:</strong>
+                <strong class="text-primary fs-5" id="resumo-total">R$ 0,00</strong>
+              </div>
+
+              <button type="button" class="btn btn-success w-100 mb-2" onclick="finalizarPedido()">
+                <i class="bi bi-check-circle"></i> Confirmar Pedido
+              </button>
+              <a href="carrinho.html" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-arrow-left"></i> Voltar ao Carrinho
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <p>&copy; 2024 Pet Shop. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+  <!-- Modal de Sucesso -->
+  <div class="modal fade" id="modalSucesso" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">
+            <i class="bi bi-check-circle"></i> Pedido Realizado com Sucesso!
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <div class="mb-3">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+          </div>
+          <h4>Pedido #<span id="numeroPedido"></span></h4>
+          <p class="mb-0">Seu pedido foi realizado com sucesso!</p>
+          <p>Em breve você receberá um e-mail com os detalhes.</p>
+        </div>
+        <div class="modal-footer">
+          <a href="index.html" class="btn btn-secondary">Voltar ao Início</a>
+          <button type="button" class="btn btn-primary" onclick="verMeusPedidos()">Ver Meus Pedidos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Scripts da aplicação -->
+  <script src="js/api-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/carrinho.js"></script>
+  <script>
+    // Proteger página - requer login
+    AuthManager.protectPage();
+
+    // Carregar e exibir resumo ao carregar página
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('💳 Carregando página de checkout...');
+      
+      // Atualizar navbar
+      AuthManager.updateNavbar();
+      
+      // Adicionar link do carrinho ao navbar
+      CarrinhoManager.adicionarLinkCarrinho();
+      
+      // Carregar dados do cliente
+      carregarDadosCliente();
+      
+      // Exibir resumo do carrinho
+      exibirResumo();
+    });
+
+    /**
+     * Carrega dados do cliente para preencher formulário
+     */
+    async function carregarDadosCliente() {
+      try {
+        const userData = JSON.parse(localStorage.getItem('petshop_user_data'));
+        if (!userData || !userData.clienteId) {
+          console.warn('⚠️ Cliente não encontrado');
+          return;
+        }
+
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CLIENTES}/${userData.clienteId}`);
+        if (response.ok) {
+          const cliente = await response.json();
+          
+          // Preencher campos do formulário
+          if (cliente.endereco) {
+            document.getElementById('enderecoEntrega').value = cliente.endereco;
+          }
+          if (cliente.telefone) {
+            document.getElementById('telefoneContato').value = cliente.telefone;
+          }
+        }
+      } catch (error) {
+        console.error('❌ Erro ao carregar dados do cliente:', error);
+      }
+    }
+
+    /**
+     * Exibe resumo do carrinho
+     */
+    function exibirResumo() {
+      const carrinho = CarrinhoManager.getCarrinho();
+      const itensResumo = document.getElementById('itens-resumo');
+
+      if (carrinho.length === 0) {
+        window.location.href = 'carrinho.html';
+        return;
+      }
+
+      // Renderizar itens
+      itensResumo.innerHTML = '';
+      carrinho.forEach(item => {
+        const itemHTML = `
+          <div class="d-flex justify-content-between mb-2">
+            <div>
+              <small>${item.nome}</small>
+              <br>
+              <small class="text-muted">${item.quantidade}x ${formatarMoeda(item.preco)}</small>
+            </div>
+            <strong>${formatarMoeda(item.preco * item.quantidade)}</strong>
+          </div>
+        `;
+        itensResumo.insertAdjacentHTML('beforeend', itemHTML);
+      });
+
+      // Atualizar totais
+      const total = CarrinhoManager.getTotal();
+      document.getElementById('resumo-subtotal').textContent = formatarMoeda(total);
+      document.getElementById('resumo-total').textContent = formatarMoeda(total);
+    }
+
+    /**
+     * Finaliza o pedido
+     */
+    async function finalizarPedido() {
+      const form = document.getElementById('formCheckout');
+      
+      // Validar formulário
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const carrinho = CarrinhoManager.getCarrinho();
+      if (carrinho.length === 0) {
+        CarrinhoManager.mostrarToast('❌ Carrinho vazio!', 'danger');
+        return;
+      }
+
+      // Obter dados do usuário
+      const userData = JSON.parse(localStorage.getItem('petshop_user_data'));
+      if (!userData || !userData.clienteId) {
+        CarrinhoManager.mostrarToast('❌ Dados do cliente não encontrados!', 'danger');
+        return;
+      }
+
+      // Preparar dados do pedido
+      const formaPagamento = document.querySelector('input[name="formaPagamento"]:checked').value;
+      const observacoes = document.getElementById('observacoes').value;
+
+        const pedidoData = {
+          clienteId: userData.clienteId,
+          formaPagamento: formaPagamento,
+          observacoes: observacoes
+        };
+
+        console.log('📦 Enviando pedido:', pedidoData);
+
+        try {
+          // 1. Criar pedido vazio
+          const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PEDIDOS}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pedidoData)
+          });
+
+          if (!response.ok) {
+            throw new Error('Erro ao criar pedido');
+          }
+
+          const pedido = await response.json();
+          console.log('✅ Pedido criado:', pedido);
+
+          // 2. Adicionar itens ao pedido
+          for (const item of carrinho) {
+            const itemData = {
+              produtoId: item.id,
+              quantidade: item.quantidade
+            };
+            const itemResp = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PEDIDOS}/${pedido.id}/itens`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(itemData)
+            });
+            if (!itemResp.ok) {
+              throw new Error('Erro ao adicionar item ao pedido');
+            }
+          }
+
+          // 3. (Opcional) Confirmar pedido
+          // await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PEDIDOS}/${pedido.id}/confirmar`, { method: 'POST' });
+
+          // Limpar carrinho
+          CarrinhoManager.limparCarrinho();
+
+          // Mostrar modal de sucesso
+          document.getElementById('numeroPedido').textContent = pedido.id;
+          const modal = new bootstrap.Modal(document.getElementById('modalSucesso'));
+          modal.show();
+
+        } catch (error) {
+          console.error('❌ Erro ao finalizar pedido:', error);
+          CarrinhoManager.mostrarToast('❌ Erro ao finalizar pedido. Tente novamente.', 'danger');
+        }
+    }
+
+    /**
+     * Redireciona para página de pedidos
+     */
+    function verMeusPedidos() {
+      window.location.href = 'meus-pedidos.html';
+    }
+
+    /**
+     * Formata valor em moeda brasileira
+     */
+    function formatarMoeda(valor) {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(valor);
+    }
+
+    // Tornar funções disponíveis globalmente
+    window.finalizarPedido = finalizarPedido;
+    window.verMeusPedidos = verMeusPedidos;
+  </script>
+</body>
+</html>

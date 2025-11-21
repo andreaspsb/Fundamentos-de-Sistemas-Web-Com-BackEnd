@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo — Pet Shop</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
+  <!-- CSS Customizado -->
+  <link rel="stylesheet" href="../css/style.css?v=4">
+  
+  <style>
+    .stat-card {
+      border-left: 4px solid;
+      transition: transform 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    .stat-card.clientes { border-left-color: #0d6efd; }
+    .stat-card.pets { border-left-color: #198754; }
+    .stat-card.agendamentos { border-left-color: #ffc107; }
+    .stat-card.pedidos { border-left-color: #dc3545; }
+    
+    .admin-menu {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .card-link:hover {
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="admin-menu text-white py-4 shadow">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-0">🛡️ Painel Administrativo</h1>
+          <p class="mb-0 small">Bem-vindo, <span id="adminName">Admin</span></p>
+        </div>
+        <div>
+          <a href="../" class="btn btn-light btn-sm me-2">
+            <i class="bi bi-house"></i> Site
+          </a>
+          <button onclick="AuthManager.logout()" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-box-arrow-right"></i> Sair
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container my-5">
+    <!-- Estatísticas -->
+    <section class="mb-5">
+      <h2 class="mb-4">📊 Estatísticas Rápidas</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="card shadow-sm stat-card clientes">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-1">Clientes</h6>
+                  <h2 class="mb-0" id="totalClientes">--</h2>
+                </div>
+                <div class="fs-1 text-primary">👥</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="card shadow-sm stat-card pets">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-1">Pets Cadastrados</h6>
+                  <h2 class="mb-0" id="totalPets">--</h2>
+                </div>
+                <div class="fs-1 text-success">🐾</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="card shadow-sm stat-card agendamentos">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-1">Agendamentos</h6>
+                  <h2 class="mb-0" id="totalAgendamentos">--</h2>
+                </div>
+                <div class="fs-1 text-warning">📅</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="card shadow-sm stat-card pedidos">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-1">Pedidos</h6>
+                  <h2 class="mb-0" id="totalPedidos">--</h2>
+                </div>
+                <div class="fs-1 text-danger">🛒</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Menu de Gestão -->
+    <section>
+      <h2 class="mb-4">🔧 Gestão</h2>
+      <div class="row g-4">
+        <!-- Clientes -->
+        <div class="col-md-6 col-lg-4">
+          <a href="clientes.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">👥</div>
+                <h5 class="card-title">Gerenciar Clientes</h5>
+                <p class="card-text text-muted">Visualizar, editar e excluir clientes</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Pets -->
+        <div class="col-md-6 col-lg-4">
+          <a href="pets.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">🐾</div>
+                <h5 class="card-title">Gerenciar Pets</h5>
+                <p class="card-text text-muted">Visualizar e editar pets cadastrados</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Produtos -->
+        <div class="col-md-6 col-lg-4">
+          <a href="produtos.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">📦</div>
+                <h5 class="card-title">Gerenciar Produtos</h5>
+                <p class="card-text text-muted">Adicionar, editar e controlar estoque</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Serviços -->
+        <div class="col-md-6 col-lg-4">
+          <a href="servicos.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">✂️</div>
+                <h5 class="card-title">Gerenciar Serviços</h5>
+                <p class="card-text text-muted">Editar serviços e preços</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Agendamentos -->
+        <div class="col-md-6 col-lg-4">
+          <a href="agendamentos.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">📅</div>
+                <h5 class="card-title">Gerenciar Agendamentos</h5>
+                <p class="card-text text-muted">Visualizar e atualizar status</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Pedidos -->
+        <div class="col-md-6 col-lg-4">
+          <a href="pedidos.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">🛒</div>
+                <h5 class="card-title">Gerenciar Pedidos</h5>
+                <p class="card-text text-muted">Processar e acompanhar pedidos</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Usuários -->
+        <div class="col-md-6 col-lg-4">
+          <a href="usuarios.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100 border-primary">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">🔐</div>
+                <h5 class="card-title">Gerenciar Usuários</h5>
+                <p class="card-text text-muted">Controle de acesso e permissões</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Relatórios -->
+        <div class="col-md-6 col-lg-4">
+          <a href="relatorios.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">📈</div>
+                <h5 class="card-title">Relatórios</h5>
+                <p class="card-text text-muted">Análises e métricas do sistema</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Categorias -->
+        <div class="col-md-6 col-lg-4">
+          <a href="categorias.html" class="card-link">
+            <div class="card shadow-sm hover-card h-100">
+              <div class="card-body text-center">
+                <div class="display-4 mb-3">🏷️</div>
+                <h5 class="card-title">Gerenciar Categorias</h5>
+                <p class="card-text text-muted">Organizar produtos por categoria</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Avisos -->
+    <section class="mt-5">
+      <div class="alert alert-info">
+        <h5 class="alert-heading">ℹ️ Informações</h5>
+        <p class="mb-0">Você está logado como <strong>Administrador</strong>. Tenha cuidado ao editar ou excluir dados.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-0"><small>&copy; 2025 Pet Shop - Painel Administrativo</small></p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  
+  <!-- JavaScript -->
+  <script src="../js/api-config.js"></script>
+  <script src="../js/auth.js"></script>
+  
+  <script>
+    // Proteger página - apenas ADMIN
+    AuthManager.protectPage('ADMIN');
+    
+    // Mostrar nome do admin
+    const userData = AuthManager.getUserData();
+    if (userData && userData.username) {
+      document.getElementById('adminName').textContent = userData.username;
+    }
+    
+    // Carregar estatísticas
+    async function carregarEstatisticas() {
+      try {
+        // Buscar clientes
+        const resClientes = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CLIENTES}`);
+        if (resClientes.ok) {
+          const clientes = await resClientes.json();
+          document.getElementById('totalClientes').textContent = clientes.length;
+        }
+        
+        // Buscar pets
+        const resPets = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PETS}`);
+        if (resPets.ok) {
+          const pets = await resPets.json();
+          document.getElementById('totalPets').textContent = pets.length;
+        }
+        
+        // Buscar agendamentos
+        const resAgendamentos = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AGENDAMENTOS}`);
+        if (resAgendamentos.ok) {
+          const agendamentos = await resAgendamentos.json();
+          document.getElementById('totalAgendamentos').textContent = agendamentos.length;
+        }
+        
+        // Buscar pedidos
+        const resPedidos = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PEDIDOS}`);
+        if (resPedidos.ok) {
+          const pedidos = await resPedidos.json();
+          document.getElementById('totalPedidos').textContent = pedidos.length;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+        document.querySelectorAll('[id^="total"]').forEach(el => {
+          el.textContent = '0';
+        });
+      }
+    }
+    
+    // Carregar ao iniciar
+    carregarEstatisticas();
+  </script>
+</body>
+</html>

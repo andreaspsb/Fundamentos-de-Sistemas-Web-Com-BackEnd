@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Pedidos - Pet Shop</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="bi bi-shop"></i> Pet Shop
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto" id="menu-principal">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Início</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              Produtos
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="categorias/racoes-alimentacao/index.html">Rações e Alimentação</a></li>
+              <li><a class="dropdown-item" href="categorias/acessorios-brinquedos/index.html">Acessórios e Brinquedos</a></li>
+              <li><a class="dropdown-item" href="categorias/higiene-cuidados/index.html">Higiene e Cuidados</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="servicos/index.html">Serviços</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cadastro.html">Cadastro</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="py-5">
+    <div class="container">
+      <h1 class="mb-4">
+        <i class="bi bi-box-seam"></i> Meus Pedidos
+      </h1>
+
+      <!-- Loading -->
+      <div id="loading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p class="mt-3">Carregando seus pedidos...</p>
+      </div>
+
+      <!-- Mensagem de nenhum pedido -->
+      <div id="sem-pedidos" class="alert alert-info d-none">
+        <i class="bi bi-inbox"></i> Você ainda não realizou nenhum pedido.
+        <a href="index.html" class="alert-link">Começar a comprar</a>
+      </div>
+
+      <!-- Lista de Pedidos -->
+      <div id="lista-pedidos" class="d-none">
+        <!-- Será preenchido via JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <p>&copy; 2024 Pet Shop. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Modal Detalhes do Pedido -->
+  <div class="modal fade" id="modalDetalhesPedido" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-receipt"></i> Detalhes do Pedido #<span id="modal-pedido-id"></span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Data:</strong>
+              <span id="modal-pedido-data"></span>
+            </div>
+            <div class="col-md-6">
+              <strong>Status:</strong>
+              <span id="modal-pedido-status"></span>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Forma de Pagamento:</strong>
+              <span id="modal-pedido-pagamento"></span>
+            </div>
+            <div class="col-md-6">
+              <strong>Total:</strong>
+              <span id="modal-pedido-total" class="text-success fw-bold"></span>
+            </div>
+          </div>
+          
+          <hr>
+          
+          <h6>Itens do Pedido:</h6>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th class="text-center">Quantidade</th>
+                  <th class="text-end">Preço Unit.</th>
+                  <th class="text-end">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="modal-pedido-itens">
+                <!-- Será preenchido via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="modal-pedido-observacoes" class="mt-3">
+            <!-- Será preenchido via JavaScript -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Scripts da aplicação -->
+  <script src="js/api-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/carrinho.js"></script>
+  <script>
+    // Proteger página - requer login
+    AuthManager.protectPage();
+
+    // Carregar pedidos ao carregar página
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📦 Carregando página de pedidos...');
+      
+      // Atualizar navbar
+      AuthManager.updateNavbar();
+      
+      // Adicionar link do carrinho ao navbar
+      CarrinhoManager.adicionarLinkCarrinho();
+      
+      // Carregar pedidos do cliente
+      carregarPedidos();
+    });
+
+    /**
+     * Carrega pedidos do cliente
+     */
+    async function carregarPedidos() {
+      const loading = document.getElementById('loading');
+      const semPedidos = document.getElementById('sem-pedidos');
+      const listaPedidos = document.getElementById('lista-pedidos');
+
+      try {
+        const userData = JSON.parse(localStorage.getItem('petshop_user_data'));
+        if (!userData || !userData.clienteId) {
+          throw new Error('Dados do cliente não encontrados');
+        }
+
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PEDIDOS}/cliente/${userData.clienteId}`);
+        
+        if (!response.ok) {
+          throw new Error('Erro ao carregar pedidos');
+        }
+
+        const pedidos = await response.json();
+        console.log('📦 Pedidos carregados:', pedidos);
+
+        loading.classList.add('d-none');
+
+        if (pedidos.length === 0) {
+          semPedidos.classList.remove('d-none');
+          return;
+        }
+
+        listaPedidos.classList.remove('d-none');
+        renderizarPedidos(pedidos);
+
+      } catch (error) {
+        console.error('❌ Erro ao carregar pedidos:', error);
+        loading.classList.add('d-none');
+        semPedidos.classList.remove('d-none');
+        semPedidos.innerHTML = `
+          <i class="bi bi-exclamation-triangle"></i> 
+          Erro ao carregar pedidos. Tente novamente mais tarde.
+        `;
+      }
+    }
+
+    /**
+     * Renderiza lista de pedidos
+     */
+    function renderizarPedidos(pedidos) {
+      const listaPedidos = document.getElementById('lista-pedidos');
+      listaPedidos.innerHTML = '';
+
+      // Ordenar por data decrescente (mais recente primeiro)
+      pedidos.sort((a, b) => new Date(b.dataPedido) - new Date(a.dataPedido));
+
+      pedidos.forEach(pedido => {
+        const statusClass = getStatusClass(pedido.status);
+        const statusIcon = getStatusIcon(pedido.status);
+        
+        const pedidoHTML = `
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                  <h5 class="mb-0">Pedido #${pedido.id}</h5>
+                  <small class="text-muted">${formatarData(pedido.dataPedido)}</small>
+                </div>
+                <div class="col-md-3">
+                  <span class="badge ${statusClass}">
+                    ${statusIcon} ${formatarStatus(pedido.status)}
+                  </span>
+                </div>
+                <div class="col-md-2">
+                  <strong>${pedido.itens ? pedido.itens.length : 0}</strong> 
+                  <small class="text-muted">item(ns)</small>
+                </div>
+                <div class="col-md-3">
+                  <strong class="text-success">${formatarMoeda(pedido.valorTotal)}</strong>
+                  <br>
+                  <small class="text-muted">${formatarFormaPagamento(pedido.formaPagamento)}</small>
+                </div>
+                <div class="col-md-2 text-end">
+                  <button class="btn btn-outline-primary btn-sm" onclick="verDetalhes(${pedido.id})">
+                    <i class="bi bi-eye"></i> Ver Detalhes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        listaPedidos.insertAdjacentHTML('beforeend', pedidoHTML);
+      });
+    }
+
+    /**
+     * Exibe detalhes do pedido em modal
+     */
+    async function verDetalhes(pedidoId) {
+      try {
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PEDIDOS}/${pedidoId}`);
+        
+        if (!response.ok) {
+          throw new Error('Erro ao carregar detalhes do pedido');
+        }
+
+        const pedido = await response.json();
+        console.log('📋 Detalhes do pedido:', pedido);
+
+        // Preencher modal
+        document.getElementById('modal-pedido-id').textContent = pedido.id;
+        document.getElementById('modal-pedido-data').textContent = formatarDataHora(pedido.dataPedido);
+        document.getElementById('modal-pedido-status').innerHTML = `
+          <span class="badge ${getStatusClass(pedido.status)}">
+            ${getStatusIcon(pedido.status)} ${formatarStatus(pedido.status)}
+          </span>
+        `;
+        document.getElementById('modal-pedido-pagamento').textContent = formatarFormaPagamento(pedido.formaPagamento);
+        document.getElementById('modal-pedido-total').textContent = formatarMoeda(pedido.valorTotal);
+
+        // Preencher itens
+        const itensContainer = document.getElementById('modal-pedido-itens');
+        itensContainer.innerHTML = '';
+        
+        if (pedido.itens && pedido.itens.length > 0) {
+          pedido.itens.forEach(item => {
+            const itemHTML = `
+              <tr>
+                <td>${item.produto ? item.produto.nome : 'Produto não encontrado'}</td>
+                <td class="text-center">${item.quantidade}</td>
+                <td class="text-end">${formatarMoeda(item.precoUnitario)}</td>
+                <td class="text-end">${formatarMoeda(item.precoUnitario * item.quantidade)}</td>
+              </tr>
+            `;
+            itensContainer.insertAdjacentHTML('beforeend', itemHTML);
+          });
+        }
+
+        // Observações
+        const observacoesContainer = document.getElementById('modal-pedido-observacoes');
+        if (pedido.observacoes) {
+          observacoesContainer.innerHTML = `
+            <div class="alert alert-info">
+              <strong>Observações:</strong><br>
+              ${pedido.observacoes}
+            </div>
+          `;
+        } else {
+          observacoesContainer.innerHTML = '';
+        }
+
+        // Mostrar modal
+        const modal = new bootstrap.Modal(document.getElementById('modalDetalhesPedido'));
+        modal.show();
+
+      } catch (error) {
+        console.error('❌ Erro ao carregar detalhes:', error);
+        alert('Erro ao carregar detalhes do pedido');
+      }
+    }
+
+    /**
+     * Retorna classe CSS para o status
+     */
+    function getStatusClass(status) {
+      const classes = {
+        'PENDENTE': 'bg-warning',
+        'CONFIRMADO': 'bg-info',
+        'EM_PREPARACAO': 'bg-primary',
+        'ENVIADO': 'bg-primary',
+        'ENTREGUE': 'bg-success',
+        'CANCELADO': 'bg-danger'
+      };
+      return classes[status] || 'bg-secondary';
+    }
+
+    /**
+     * Retorna ícone para o status
+     */
+    function getStatusIcon(status) {
+      const icons = {
+        'PENDENTE': '<i class="bi bi-clock"></i>',
+        'CONFIRMADO': '<i class="bi bi-check-circle"></i>',
+        'EM_PREPARACAO': '<i class="bi bi-box-seam"></i>',
+        'ENVIADO': '<i class="bi bi-truck"></i>',
+        'ENTREGUE': '<i class="bi bi-check-circle-fill"></i>',
+        'CANCELADO': '<i class="bi bi-x-circle"></i>'
+      };
+      return icons[status] || '<i class="bi bi-circle"></i>';
+    }
+
+    /**
+     * Formata status para exibição
+     */
+    function formatarStatus(status) {
+      const statusMap = {
+        'PENDENTE': 'Pendente',
+        'CONFIRMADO': 'Confirmado',
+        'EM_PREPARACAO': 'Em Preparação',
+        'ENVIADO': 'Enviado',
+        'ENTREGUE': 'Entregue',
+        'CANCELADO': 'Cancelado'
+      };
+      return statusMap[status] || status;
+    }
+
+    /**
+     * Formata forma de pagamento
+     */
+    function formatarFormaPagamento(forma) {
+      const formaMap = {
+        'PIX': 'PIX',
+        'CARTAO_CREDITO': 'Cartão de Crédito',
+        'CARTAO_DEBITO': 'Cartão de Débito',
+        'BOLETO': 'Boleto Bancário',
+        'DINHEIRO': 'Dinheiro'
+      };
+      return formaMap[forma] || forma;
+    }
+
+    /**
+     * Formata data
+     */
+    function formatarData(data) {
+      return new Date(data).toLocaleDateString('pt-BR');
+    }
+
+    /**
+     * Formata data e hora
+     */
+    function formatarDataHora(data) {
+      return new Date(data).toLocaleString('pt-BR');
+    }
+
+    /**
+     * Formata valor em moeda brasileira
+     */
+    function formatarMoeda(valor) {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(valor);
+    }
+
+    // Tornar funções disponíveis globalmente
+    window.verDetalhes = verDetalhes;
+  </script>
+</body>
+</html>
