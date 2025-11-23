@@ -68,7 +68,6 @@ spring-boot-starter-*/
 node_modules/
 npm-debug.log
 yarn-error.log
-package-lock.json
 yarn.lock
 
 # GitHub Actions

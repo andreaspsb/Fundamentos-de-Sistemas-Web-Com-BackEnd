@@ -344,7 +344,7 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token": "jwt.token.aqui",
   "username": "admin",
   "email": "admin@petshop.com",
   "role": "ADMIN",
