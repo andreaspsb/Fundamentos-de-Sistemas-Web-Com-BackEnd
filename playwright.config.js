@@ -23,10 +23,10 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   
   /* Retry em caso de falha */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   
   /* Workers para execução paralela */
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 2 : undefined,
   
   /* Reporter para saída de testes */
   reporter: [

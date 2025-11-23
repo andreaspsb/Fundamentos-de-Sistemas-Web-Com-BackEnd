@@ -36,15 +36,15 @@ check_docker() {
     fi
     
     # Verificar Docker Compose (plugin ou standalone)
-    if docker compose version &> /dev/null 2>&1; then
-        DOCKER_COMPOSE="docker compose"
-    elif command -v $DOCKER_COMPOSE &> /dev/null; then
-        DOCKER_COMPOSE="$DOCKER_COMPOSE"
+    if sudo docker compose version &> /dev/null 2>&1; then
+        DOCKER_COMPOSE="sudo docker compose"
+    elif command -v docker-compose &> /dev/null; then
+        DOCKER_COMPOSE="sudo docker-compose"
     else
         error "Docker Compose não está instalado."
     fi
     
-    success "Docker instalado: $(docker --version)"
+    success "Docker instalado: $(sudo docker --version)"
 }
 
 # Criar arquivo .env se não existir
@@ -67,7 +67,7 @@ start() {
     
     if [ "$1" == "dev" ]; then
         info "Modo desenvolvimento ativado (inclui Adminer)"
-        $DOCKER_COMPOSE -f $DOCKER_COMPOSE.yml -f $DOCKER_COMPOSE.dev.yml up -d
+        $DOCKER_COMPOSE -f docker-compose.yml -f docker-compose.dev.yml up -d
     else
         $DOCKER_COMPOSE up -d
     fi
