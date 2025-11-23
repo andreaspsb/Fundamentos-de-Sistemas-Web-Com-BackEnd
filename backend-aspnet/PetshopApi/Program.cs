@@ -16,19 +16,23 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     });
 
-// Configure Database (PostgreSQL em produção, SQLite em desenvolvimento)
+// Configure Database (SQL Server/Azure SQL em produção, SQLite em desenvolvimento)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var usePostgres = builder.Environment.IsProduction() || 
-                  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
 
-if (usePostgres)
+// Sobrescrever com variável de ambiente se disponível (Azure App Service)
+connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_DefaultConnection") 
+    ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+    ?? connectionString;
+
+if (builder.Environment.IsProduction() || connectionString.Contains("database.windows.net"))
 {
-    connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? connectionString;
+    // Azure SQL Database
     builder.Services.AddDbContext<PetshopContext>(options =>
-        options.UseNpgsql(connectionString));
+        options.UseSqlServer(connectionString));
 }
 else
 {
+    // SQLite para desenvolvimento local
     builder.Services.AddDbContext<PetshopContext>(options =>
         options.UseSqlite(connectionString ?? "Data Source=petshop.db"));
 }

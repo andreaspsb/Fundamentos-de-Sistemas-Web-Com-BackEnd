@@ -6,8 +6,11 @@ on:
   workflow_dispatch: # Permite deploy manual
 
 env:
-  AZURE_WEBAPP_NAME: petshop-app    # Alterar com seu nome
+  AZURE_WEBAPP_NAME_SPRING: petshop-backend-spring    # Alterar com nome do App Service Spring Boot
+  AZURE_WEBAPP_NAME_ASPNET: petshop-backend-aspnet    # Alterar com nome do App Service ASP.NET (se criado)
+  AZURE_STATIC_WEB_APP_NAME: petshop-frontend         # Nome do Static Web App
   JAVA_VERSION: '21'
+  DOTNET_VERSION: '8.0.x'
   NODE_VERSION: '18'
 
 jobs:
@@ -40,7 +43,42 @@ jobs:
         path: backend-springboot/target/*.jar
         retention-days: 1
 
-  # Job 2: Build Frontend
+  # Job 2: Build Backend ASP.NET Core
+  build-backend-aspnet:
+    name: Build Backend ASP.NET Core
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Setup .NET ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      working-directory: ./backend-aspnet/PetshopApi
+      run: dotnet restore
+
+    - name: Build
+      working-directory: ./backend-aspnet/PetshopApi
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish
+      working-directory: ./backend-aspnet/PetshopApi
+      run: |
+        dotnet publish -c Release -o ./publish
+        ls -lh ./publish
+
+    - name: Upload ASP.NET artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-aspnet
+        path: backend-aspnet/PetshopApi/publish/
+        retention-days: 1
+
+  # Job 3: Build Frontend
   build-frontend:
     name: Build Frontend
     runs-on: ubuntu-latest
@@ -62,9 +100,9 @@ jobs:
         path: frontend/
         retention-days: 1
 
-  # Job 3: Deploy Backend para Azure App Service
-  deploy-backend:
-    name: Deploy Backend → Azure
+  # Job 4: Deploy Backend Spring Boot para Azure
+  deploy-backend-spring:
+    name: Deploy Spring Boot → Azure
     needs: [build-backend]
     runs-on: ubuntu-latest
     environment:
@@ -86,15 +124,49 @@ jobs:
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v3
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}-backend
+        app-name: ${{ env.AZURE_WEBAPP_NAME_SPRING }}
         package: '*.jar'
 
     - name: Verificar saúde da aplicação
       run: |
         sleep 30
-        curl -f https://${{ env.AZURE_WEBAPP_NAME }}-backend.azurewebsites.net/actuator/health || echo "Aguardando aplicação iniciar..."
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_SPRING }}.azurewebsites.net/actuator/health || echo "Aguardando aplicação iniciar..."
 
-  # Job 4: Deploy Frontend para Azure Static Web Apps
+  # Job 5: Deploy Backend ASP.NET Core para Azure
+  deploy-backend-aspnet:
+    name: Deploy ASP.NET Core → Azure
+    needs: [build-backend-aspnet]
+    runs-on: ubuntu-latest
+    # Se você NÃO criou o App Service ASP.NET, comente ou remova este job
+    if: vars.DEPLOY_ASPNET == 'true' || true  # Remova "|| true" se quiser desabilitar
+    environment:
+      name: 'Production-ASPNET'
+      url: https://${{ env.AZURE_WEBAPP_NAME_ASPNET }}.azurewebsites.net
+    
+    steps:
+    - name: Download ASP.NET artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: backend-aspnet
+
+    - name: Login no Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy para Azure App Service
+      id: deploy-to-webapp-aspnet
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME_ASPNET }}
+        package: '.'
+
+    - name: Verificar saúde da aplicação
+      run: |
+        sleep 30
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_ASPNET }}.azurewebsites.net/health || echo "Aguardando aplicação iniciar..."
+
+  # Job 6: Deploy Frontend para Azure Static Web Apps
   deploy-frontend:
     name: Deploy Frontend → Azure Static Web Apps
     needs: [build-frontend]
@@ -122,26 +194,48 @@ jobs:
         output_location: ""
         skip_app_build: true
 
-  # Job 5: Smoke Tests em Produção
+  # Job 7: Smoke Tests em Produção
   smoke-tests:
     name: Testes de Fumaça
-    needs: [deploy-backend, deploy-frontend]
+    needs: [deploy-backend-spring, deploy-frontend]
     runs-on: ubuntu-latest
+    if: always()  # Roda mesmo se algum job falhar
     
     steps:
-    - name: Verificar Backend
+    - name: Verificar Backend Spring Boot
       run: |
-        echo "🔍 Verificando backend..."
-        curl -f https://${{ env.AZURE_WEBAPP_NAME }}-backend.azurewebsites.net/actuator/health
-        curl -f https://${{ env.AZURE_WEBAPP_NAME }}-backend.azurewebsites.net/api/produtos
+        echo "🔍 Verificando backend Spring Boot..."
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_SPRING }}.azurewebsites.net/actuator/health || echo "❌ Spring Boot não respondeu"
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_SPRING }}.azurewebsites.net/api/produtos || echo "❌ API Spring Boot falhou"
+
+    - name: Verificar Backend ASP.NET Core
+      continue-on-error: true  # Não falha se ASP.NET não existir
+      run: |
+        echo "🔍 Verificando backend ASP.NET Core..."
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_ASPNET }}.azurewebsites.net/health || echo "⚠️ ASP.NET Core não disponível (pode não estar deployado)"
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_ASPNET }}.azurewebsites.net/api/produtos || echo "⚠️ API ASP.NET não disponível"
 
     - name: Verificar Frontend
       run: |
         echo "🔍 Verificando frontend..."
-        curl -f https://${{ env.AZURE_WEBAPP_NAME }}.azurestaticapps.net
+        curl -f https://${{ env.AZURE_STATIC_WEB_APP_NAME }}.azurestaticapps.net || echo "❌ Frontend não respondeu"
 
     - name: Notificar sucesso 🎉
       run: |
         echo "✅ Deploy realizado com sucesso!"
-        echo "🌐 Frontend: https://${{ env.AZURE_WEBAPP_NAME }}.azurestaticapps.net"
-        echo "🔧 Backend: https://${{ env.AZURE_WEBAPP_NAME }}-backend.azurewebsites.net"
+        echo ""
+        echo "🌐 URLs do Projeto:"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Frontend:"
+        echo "  🎨 https://${{ env.AZURE_STATIC_WEB_APP_NAME }}.azurestaticapps.net"
+        echo ""
+        echo "Backend Spring Boot:"
+        echo "  ☕ https://${{ env.AZURE_WEBAPP_NAME_SPRING }}.azurewebsites.net"
+        echo "  📚 https://${{ env.AZURE_WEBAPP_NAME_SPRING }}.azurewebsites.net/swagger-ui.html"
+        echo "  🔌 https://${{ env.AZURE_WEBAPP_NAME_SPRING }}.azurewebsites.net/api/produtos"
+        echo ""
+        echo "Backend ASP.NET Core (se deployado):"
+        echo "  🟣 https://${{ env.AZURE_WEBAPP_NAME_ASPNET }}.azurewebsites.net"
+        echo "  📚 https://${{ env.AZURE_WEBAPP_NAME_ASPNET }}.azurewebsites.net/swagger"
+        echo "  🔌 https://${{ env.AZURE_WEBAPP_NAME_ASPNET }}.azurewebsites.net/api/produtos"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

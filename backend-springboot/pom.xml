@@ -49,6 +49,13 @@
             <scope>runtime</scope>
         </dependency>
         
+        <!-- SQL Server Driver (Azure SQL Database) -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
         <!-- Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
