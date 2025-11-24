@@ -517,6 +517,8 @@ O frontend possui um **toggle visual** no canto superior direito que permite alt
 - ✅ **CORS** - Configurado corretamente para produção
 - ✅ **SQL Injection** - Protegido via JPA/Hibernate
 - ✅ **XSS** - Prevenido via escape de HTML no frontend
+- ✅ **OWASP Dependency Check** - Scan automatizado de vulnerabilidades
+- ✅ **NVD NIST API** - Análise de CVEs com chave de API ([veja configuração](.github/NVD_API_KEY_SETUP.md))
 
 ## 🎯 Fluxos Principais
 

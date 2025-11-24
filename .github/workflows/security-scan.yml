@@ -87,8 +87,11 @@ jobs:
 
     - name: Run OWASP Dependency Check
       working-directory: ./backend-springboot
+      env:
+        NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
       run: |
         mvn org.owasp:dependency-check-maven:check \
+          -DnvdApiKey=${NVD_API_KEY} \
           -DfailBuildOnCVSS=7 \
           -DsuppressionFile=owasp-suppressions.xml || true
 
