@@ -91,7 +91,7 @@ services:
       retries: 3
       start_period: 60s
 
-  # Frontend (Nginx)
+  # Frontend Web (Nginx)
   petshop-frontend:
     image: nginx:alpine
     container_name: petshop-frontend
@@ -109,6 +109,26 @@ services:
       - petshop-aspnet
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Mobile (Expo Web)
+  petshop-mobile:
+    build:
+      context: ./mobile
+      dockerfile: Dockerfile
+    container_name: petshop-mobile
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    networks:
+      - petshop-network
+    depends_on:
+      - petshop-springboot
+      - petshop-aspnet
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
       interval: 30s
       timeout: 10s
       retries: 3

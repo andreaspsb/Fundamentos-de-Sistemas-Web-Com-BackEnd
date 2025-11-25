@@ -1,18 +1,19 @@
 # Fundamentos de Sistemas Web - Pet Shop (Full Stack)
 
-Sistema completo de e-commerce e gerenciamento para Pet Shop, desenvolvido com **dois backends alternativos** (Spring Boot + ASP.NET Core) e **HTML5, CSS3, Bootstrap 5, JavaScript (Frontend)** com sistema de toggle para alternar entre backends dinamicamente.
+Sistema completo de e-commerce e gerenciamento para Pet Shop, desenvolvido com **dois backends alternativos** (Spring Boot + ASP.NET Core), **Frontend Web** (HTML5, CSS3, Bootstrap 5, JavaScript) e **App Mobile** (React Native/Expo) com sistema de toggle para alternar entre backends dinamicamente.
 
 ## 📋 Descrição do Projeto
 
 Este projeto consiste em um **sistema full-stack** completo para Pet Shop, incluindo:
 - 🛒 **E-commerce** - Catálogo de produtos, carrinho de compras, checkout e pedidos
 - 📅 **Agendamento** - Sistema de agendamento de serviços (banho e tosa)
-- 👤 **Autenticação** - Login/logout com BCrypt e tokens
+- 👤 **Autenticação** - Login/logout com BCrypt e JWT
 - 🔐 **Autorização** - Sistema de roles (ADMIN, CLIENTE)
 - 🛠️ **Painel Admin** - CRUD completo de produtos, clientes, agendamentos e pedidos
 - 📦 **Dual Backend** - Spring Boot (Java) e ASP.NET Core (C#/.NET)
 - 🔄 **Backend Toggle** - Sistema de alternância dinâmica entre backends
-- 💾 **Banco de Dados** - H2 (Spring Boot) e SQLite (ASP.NET Core)
+- 📱 **App Mobile** - React Native/Expo com suporte a Android, iOS e Web
+- 💾 **Banco de Dados** - H2 (Spring Boot), SQLite (ASP.NET Core), PostgreSQL (Docker)
 
 ## 🎯 Funcionalidades
 
@@ -124,6 +125,29 @@ Painel completo para gerenciamento do sistema (requer role ADMIN):
 - ✅ Listagem de pedidos
 - ✅ Visualização de: cliente, data, status, total
 - ✅ Exclusão de pedidos
+
+### 📱 App Mobile (`/mobile/`)
+
+Aplicativo mobile desenvolvido com React Native e Expo:
+
+#### Funcionalidades
+- ✅ Login e Cadastro de usuário
+- ✅ Navegação por categorias de produtos
+- ✅ Busca de produtos
+- ✅ Detalhes do produto com imagem
+- ✅ Carrinho de compras persistente
+- ✅ Checkout com múltiplas formas de pagamento
+- ✅ Histórico de pedidos
+- ✅ Agendamento de serviços (banho, tosa)
+- ✅ Perfil do usuário
+
+#### Tecnologias
+- **React Native** com Expo
+- **TypeScript** para tipagem
+- **React Navigation** para navegação
+- **React Native Paper** (Material Design)
+- **Axios** para requisições HTTP
+- **Expo SecureStore** para armazenamento seguro
 
 ### 🔧 Backend (Spring Boot)
 
@@ -258,6 +282,17 @@ O sistema cria automaticamente ao iniciar:
 │   ├── teste-backend.html               # Teste de integração com API
 │   └── README.md                        # Documentação de testes
 │
+├── mobile/                              # 📱 App Mobile (React Native/Expo)
+│   ├── App.tsx                          # Componente raiz
+│   ├── src/
+│   │   ├── screens/                     # Telas do app
+│   │   ├── components/                  # Componentes reutilizáveis
+│   │   ├── contexts/                    # Contextos (Auth, Cart)
+│   │   ├── services/                    # API e Storage
+│   │   └── navigation/                  # Configuração de rotas
+│   ├── Dockerfile                       # Build para Docker
+│   └── README.md                        # Documentação do mobile
+│
 ├── .gitignore                           # Arquivos ignorados pelo Git
 └── README.md                            # 📄 Este arquivo
     │       │   ├── repository/
@@ -297,9 +332,37 @@ O sistema cria automaticamente ao iniciar:
 **Para Backend ASP.NET Core:**
 - **.NET SDK 8.0+**
 
-**Para Frontend:**
+**Para Frontend Web:**
 - **Navegador moderno** (Chrome, Firefox, Edge)
 - **Live Server** (VS Code) ou servidor HTTP local
+
+**Para App Mobile:**
+- **Node.js 18+**
+- **Expo CLI** (`npm install -g expo-cli`)
+- **Expo Go** (app no celular) ou emulador
+
+**Para Docker (Recomendado):**
+- **Docker** e **Docker Compose**
+
+### 🐳 Executar com Docker (Recomendado)
+
+```bash
+# Subir todos os serviços
+docker-compose up -d
+
+# Serviços disponíveis:
+# - Frontend Web:    http://localhost:80
+# - App Mobile Web:  http://localhost:8081
+# - Backend Spring:  http://localhost:8080
+# - Backend ASP.NET: http://localhost:5000
+# - PostgreSQL:      localhost:5432
+
+# Ver logs
+docker-compose logs -f
+
+# Parar serviços
+docker-compose down
+```
 
 ### 1. Iniciar um dos Backends
 

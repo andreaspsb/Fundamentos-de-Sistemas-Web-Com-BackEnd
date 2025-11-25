@@ -7,23 +7,156 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  # Todos os testes foram desabilitados temporariamente
-  # Para reabilitar, descomente os jobs abaixo
-  
-  # Job placeholder para manter workflow válido
-  validate:
-    name: Validação de Código
+  # Detectar quais projetos foram modificados
+  changes:
+    name: Detectar Mudanças
+    runs-on: ubuntu-latest
+    outputs:
+      backend-spring: ${{ steps.filter.outputs.backend-spring }}
+      backend-aspnet: ${{ steps.filter.outputs.backend-aspnet }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      mobile: ${{ steps.filter.outputs.mobile }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend-spring:
+              - 'backend-springboot/**'
+            backend-aspnet:
+              - 'backend-aspnet/**'
+            frontend:
+              - 'frontend/**'
+            mobile:
+              - 'mobile/**'
+
+  # Validação do Mobile (React Native / TypeScript)
+  mobile-validate:
+    name: Mobile - TypeScript Validation
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true'
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout código
       uses: actions/checkout@v4
-    
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: mobile/package-lock.json
+
+    - name: Instalar dependências
+      working-directory: ./mobile
+      run: npm ci
+
+    - name: Verificar TypeScript
+      working-directory: ./mobile
+      run: npx tsc --noEmit
+
+    - name: Lint (se configurado)
+      working-directory: ./mobile
+      run: npm run lint --if-present
+      continue-on-error: true
+
     - name: Validação concluída
       run: |
-        echo "✅ Validação básica concluída"
-        echo "⚠️ Testes E2E do Playwright estão desabilitados"
-        echo "ℹ️ Para reabilitar, veja .github/workflows/ci-tests.yml"
+        echo "✅ Mobile: TypeScript válido"
+        echo "📱 Projeto React Native/Expo verificado"
+
+  # Validação do Frontend Web
+  frontend-validate:
+    name: Frontend - HTML/CSS/JS Validation
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Validar estrutura do frontend
+      run: |
+        echo "🔍 Verificando arquivos do frontend..."
+        ls -la frontend/
+        echo "✅ Frontend: Estrutura válida"
+
+  # Validação do Backend Spring Boot
+  backend-spring-validate:
+    name: Backend Spring - Java Validation
+    needs: changes
+    if: needs.changes.outputs.backend-spring == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Setup Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'maven'
+
+    - name: Compilar projeto
+      working-directory: ./backend-springboot
+      run: mvn compile -DskipTests
+
+    - name: Validação concluída
+      run: |
+        echo "✅ Backend Spring Boot: Compilação OK"
+
+  # Validação do Backend ASP.NET Core
+  backend-aspnet-validate:
+    name: Backend ASP.NET - C# Validation
+    needs: changes
+    if: needs.changes.outputs.backend-aspnet == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restaurar e compilar
+      working-directory: ./backend-aspnet/PetshopApi
+      run: |
+        dotnet restore
+        dotnet build --no-restore
+
+    - name: Validação concluída
+      run: |
+        echo "✅ Backend ASP.NET Core: Compilação OK"
+
+  # Resumo final
+  summary:
+    name: Resumo CI
+    needs: [changes, mobile-validate, frontend-validate, backend-spring-validate, backend-aspnet-validate]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Resumo das validações
+      run: |
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "📊 RESUMO DO CI"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        echo "Projetos modificados:"
+        echo "  ☕ Backend Spring Boot: ${{ needs.changes.outputs.backend-spring }}"
+        echo "  🟣 Backend ASP.NET:     ${{ needs.changes.outputs.backend-aspnet }}"
+        echo "  🌐 Frontend Web:        ${{ needs.changes.outputs.frontend }}"
+        echo "  📱 Mobile:              ${{ needs.changes.outputs.mobile }}"
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
   # Job 1: Backend Tests (Spring Boot) - DESABILITADO
   # backend-springboot-tests:
